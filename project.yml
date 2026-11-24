@@ -24,6 +24,32 @@ packages:
     path: Packages/RemoteCore
 
 targets:
+  # Mac 側アプリ（メニューバーに常駐）
+  MacHost:
+    type: application
+    platform: macOS
+    sources:
+      - Apps/MacHost
+      - Apps/Shared
+    dependencies:
+      - package: RemoteCore
+    info:
+      path: Apps/MacHost/Info.plist
+      properties:
+        CFBundleDisplayName: MacRemote
+        LSUIElement: true
+        LSApplicationCategoryType: public.app-category.utilities
+        NSLocalNetworkUsageDescription: iPhone や iPad からの接続を受け付けるために、ローカルネットワークを使います。
+        NSBonjourServices:
+          - _macremote._tcp
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.mushiotoko.macremote.host
+        PRODUCT_NAME: MacRemote
+        # CGEvent で操作を送るため、App Sandbox は使わない。
+        ENABLE_APP_SANDBOX: NO
+        ENABLE_HARDENED_RUNTIME: YES
+
   # M2 検証用：Mac 側
   ProbeHost:
     type: application

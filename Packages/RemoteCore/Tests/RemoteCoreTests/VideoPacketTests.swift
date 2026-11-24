@@ -99,3 +99,35 @@ struct VideoPacketTests {
         #expect(events == [.requestKeyFrame])
     }
 }
+
+@Suite("UDP の宛先登録")
+struct UDPRegistrationTests {
+    let key = Data(repeating: 0x42, count: 32)
+
+    @Test("正しい鍵で、カウンタが増えていれば受け付ける")
+    func accepts() {
+        var verifier = UDPRegistrationVerifier(videoKey: key)
+        let first = verifier.accept(UDPRegistration.make(counter: 1, videoKey: key))
+        let second = verifier.accept(UDPRegistration.make(counter: 5, videoKey: key))
+        #expect(first && second)
+    }
+
+    @Test("同じ・古いカウンタ、別の鍵、改ざんは受け付けない")
+    func rejects() {
+        var verifier = UDPRegistrationVerifier(videoKey: key)
+        let packet = UDPRegistration.make(counter: 10, videoKey: key)
+        var tampered = UDPRegistration.make(counter: 12, videoKey: key)
+        tampered[3] ^= 0x01
+
+        let results = [
+            verifier.accept(packet),                                                         // 受け付ける
+            verifier.accept(packet),                                                         // 送り直し
+            verifier.accept(UDPRegistration.make(counter: 9, videoKey: key)),                // 古い
+            verifier.accept(UDPRegistration.make(counter: 11, videoKey: Data(repeating: 1, count: 32))), // 別の鍵
+            verifier.accept(tampered),                                                       // 改ざん
+            verifier.accept(Data([0x20])),                                                   // 短すぎる
+        ]
+        #expect(results == [true, false, false, false, false, false])
+        #expect(UDPRegistration.make(counter: 1, videoKey: key).count == UDPRegistration.length)
+    }
+}

@@ -156,7 +156,8 @@ public enum ScrollPhase: UInt8, Sendable {
 }
 
 public struct Scroll: Equatable, Sendable {
-    /// ピクセル単位のスクロール量。
+    /// ピクセル単位のスクロール量。向きは macOS の CGEvent のスクロールと同じ
+    /// （dy が正なら上へ、dx が正なら左へスクロールする）。iPhone 側で向きを合わせてから送る。
     public var dx: Float
     public var dy: Float
     public var phase: ScrollPhase
