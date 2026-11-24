@@ -1,0 +1,81 @@
+name: MacRemote
+
+options:
+  bundleIdPrefix: com.mushiotoko.macremote
+  deploymentTarget:
+    iOS: "17.0"
+    macOS: "14.0"
+  createIntermediateGroups: true
+
+configFiles:
+  Debug: Config/Signing.xcconfig
+  Release: Config/Signing.xcconfig
+
+settings:
+  base:
+    SWIFT_VERSION: "5.0"
+    SWIFT_STRICT_CONCURRENCY: minimal
+    MARKETING_VERSION: "0.1.0"
+    CURRENT_PROJECT_VERSION: "1"
+    CODE_SIGN_STYLE: Automatic
+
+packages:
+  RemoteCore:
+    path: Packages/RemoteCore
+
+targets:
+  # M2 検証用：Mac 側
+  ProbeHost:
+    type: application
+    platform: macOS
+    sources:
+      - Spikes/ProbeHost
+      - Apps/Shared
+    dependencies:
+      - package: RemoteCore
+    info:
+      path: Spikes/ProbeHost/Info.plist
+      properties:
+        CFBundleDisplayName: MacRemote 検証（Mac）
+        NSLocalNetworkUsageDescription: iPhone や iPad からの接続を受け付けるために、ローカルネットワークを使います。
+        NSBonjourServices:
+          - _macremote._tcp
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.mushiotoko.macremote.probe.host
+        PRODUCT_NAME: MacRemoteProbeHost
+        ENABLE_APP_SANDBOX: NO
+        ENABLE_HARDENED_RUNTIME: NO
+
+  # M2 検証用：iPhone／iPad 側
+  ProbeClient:
+    type: application
+    platform: iOS
+    sources:
+      - Spikes/ProbeClient
+      - Apps/Shared
+    dependencies:
+      - package: RemoteCore
+    info:
+      path: Spikes/ProbeClient/Info.plist
+      properties:
+        CFBundleDisplayName: MacRemote 検証
+        UILaunchScreen: {}
+        UIApplicationSupportsIndirectInputEvents: true
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+        UISupportedInterfaceOrientations~ipad:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationPortraitUpsideDown
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+        NSLocalNetworkUsageDescription: 近くの Mac を探して接続するために、ローカルネットワークを使います。
+        NSBonjourServices:
+          - _macremote._tcp
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.mushiotoko.macremote.probe.client
+        PRODUCT_NAME: MacRemoteProbe
+        TARGETED_DEVICE_FAMILY: "1,2"

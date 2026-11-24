@@ -1,0 +1,4 @@
+// 署名の設定。
+// Apple Developer の Team ID は Config/Local.xcconfig に書く（git には入れない）。
+// 例は Config/Local.xcconfig.example を参照。
+#include? "Local.xcconfig"

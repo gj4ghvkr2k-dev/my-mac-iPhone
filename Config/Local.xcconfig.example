@@ -1,0 +1,3 @@
+// このファイルを Local.xcconfig という名前でコピーし、自分の Team ID に書き換える。
+// Team ID は Xcode の Settings → Accounts、または https://developer.apple.com/account の「Membership」で確認できる。
+DEVELOPMENT_TEAM = ABCDE12345

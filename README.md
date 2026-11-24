@@ -13,12 +13,15 @@ iPhone／iPad から Mac をリモート操作するための、自分と家族�
 | `Packages/RemoteCore` | iPhone アプリと Mac アプリで共有するコード（通信・暗号化・端末登録） |
 | `Apps/MacHost` | Mac 側のアプリ（メニューバーに常駐） |
 | `Apps/iOSClient` | iPhone／iPad 側のアプリ |
+| `Apps/Shared` | 両方のアプリで使う Apple 環境専用のコード（Network.framework の包みなど） |
+| `Spikes/` | 検証用アプリ（M2：ProbeHost と ProbeClient） |
+| `project.yml` | XcodeGen の設定。`xcodegen generate` で `MacRemote.xcodeproj` を作る |
 
 ## 状況
 第1段階を進めています。
 
 - [x] M1：共通部分（`RemoteCore`）のメッセージの定義、区切り、Noise による暗号化、端末登録、映像パケットの分割・組み立て
-- [ ] M2：AirDrop と同じ仕組みの Wi-Fi 直結（AWDL）で、TCP と UDP を張れるかの検証
+- [ ] M2：AirDrop と同じ仕組みの Wi-Fi 直結（AWDL）で、TCP と UDP を張れるかの検証（検証用アプリは作成済み。[手順](docs/m2-probe.md)）
 - [ ] M3：Mac 側アプリ
 - [ ] M4：iPhone／iPad 側アプリ
 - [ ] M5：実機での結合テスト
