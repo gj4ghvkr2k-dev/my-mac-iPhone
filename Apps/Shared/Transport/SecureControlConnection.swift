@@ -66,9 +66,10 @@ final class SecureControlConnection {
     func close(sending message: ControlMessage? = nil) {
         guard !closed else { return }
         if let message { send(message) }
-        // 送信が終わるのを少し待ってから閉じる。
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { [weak self] in
-            self?.stream.cancel()
+        // 送信が終わるのを少し待ってから閉じる。呼び出し側がこのオブジェクトを手放しても閉じられるよう、強く持つ。
+        let stream = self.stream
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+            stream.cancel()
         }
     }
 

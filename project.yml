@@ -50,6 +50,40 @@ targets:
         ENABLE_APP_SANDBOX: NO
         ENABLE_HARDENED_RUNTIME: YES
 
+  # iPhone／iPad 側アプリ
+  iOSClient:
+    type: application
+    platform: iOS
+    sources:
+      - Apps/iOSClient
+      - Apps/Shared
+    dependencies:
+      - package: RemoteCore
+    info:
+      path: Apps/iOSClient/Info.plist
+      properties:
+        CFBundleDisplayName: MacRemote
+        UILaunchScreen: {}
+        UIApplicationSupportsIndirectInputEvents: true
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+        UISupportedInterfaceOrientations~ipad:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationPortraitUpsideDown
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+        NSLocalNetworkUsageDescription: 近くの Mac を探して接続するために、ローカルネットワークを使います。
+        NSBonjourServices:
+          - _macremote._tcp
+        NSCameraUsageDescription: Mac に表示された QR コードを読み取って、Mac を登録するためにカメラを使います。
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.mushiotoko.macremote.client
+        PRODUCT_NAME: MacRemote
+        TARGETED_DEVICE_FAMILY: "1,2"
+
   # M2 検証用：Mac 側
   ProbeHost:
     type: application

@@ -245,11 +245,17 @@ Mac                                              iPhone
 - 日本語の入力は、iPhone の標準の仕組み（`UITextInput`）で受け取ります。
   - 変換中の文字（未確定の文字）は、iPhone 側にだけ表示します。
   - 確定したら `Text` として送ります。
+- 文字を受け取るテキストフィールドは画面に見せないので、変換中の文字は特殊キーのバーの上に表示します。
 - 特殊キーのバーは `inputAccessoryView` に置きます。
 - 修飾キーは、1回押すと次の1キーだけ有効、2回押すと解除するまで有効、にします。
-- iPad の外付けキーボードは `pressesBegan`／`pressesEnded` で受け取り、HID のキーコードを macOS の仮想キーコードに変換して送ります。
+- iPad の外付けキーボードは `pressesBegan`／`pressesEnded` で受け取り、HID のキーコードを macOS の仮想キーコードに変換して送ります（`KeyMapping`）。日本語の変換は Mac 側で行います。
+- 修飾キーを有効にして文字を打ったときは、US 配列のキーとして送ります（⌘C など）。
 
-### 6.5 必要な Info.plist の設定
+### 6.5 iPad のトラックパッド・マウス
+- ポインターの位置を、そのまま Mac のカーソルの位置（絶対座標）として送ります（`UIHoverGestureRecognizer`）。
+- クリック、右クリック、ドラッグ、2本指スクロール（ホイール）にも対応します。
+
+### 6.6 必要な Info.plist の設定
 - `NSLocalNetworkUsageDescription`
 - `NSBonjourServices = ["_macremote._tcp"]`
 - `NSCameraUsageDescription`（QR を読むため）
