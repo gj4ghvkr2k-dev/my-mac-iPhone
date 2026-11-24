@@ -1,0 +1,19 @@
+name: RemoteCore tests
+
+on:
+  push:
+    paths:
+      - "Packages/RemoteCore/**"
+      - ".github/workflows/remotecore-tests.yml"
+  pull_request:
+    paths:
+      - "Packages/RemoteCore/**"
+
+jobs:
+  linux:
+    runs-on: ubuntu-latest
+    container: swift:6.1
+    steps:
+      - uses: actions/checkout@v4
+      - name: Test
+        run: swift test --package-path Packages/RemoteCore

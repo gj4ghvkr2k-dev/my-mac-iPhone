@@ -15,4 +15,20 @@ iPhone／iPad から Mac をリモート操作するための、自分と家族�
 | `Apps/iOSClient` | iPhone／iPad 側のアプリ |
 
 ## 状況
-第1段階の設計中です。
+第1段階を進めています。
+
+- [x] M1：共通部分（`RemoteCore`）のメッセージの定義、区切り、Noise による暗号化、端末登録、映像パケットの分割・組み立て
+- [ ] M2：AirDrop と同じ仕組みの Wi-Fi 直結（AWDL）で、TCP と UDP を張れるかの検証
+- [ ] M3：Mac 側アプリ
+- [ ] M4：iPhone／iPad 側アプリ
+- [ ] M5：実機での結合テスト
+
+## 共通部分のテスト
+
+Mac では Xcode に入っている Swift で、Linux では Swift 6.1 以上でテストを実行できます。
+
+```bash
+swift test --package-path Packages/RemoteCore
+```
+
+GitHub に push すると、GitHub Actions でも Linux 上のテストが自動で実行されます。
